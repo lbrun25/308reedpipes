@@ -6,14 +6,15 @@ import (
 	"strconv"
 )
 
+var (
+	ErrTooManyArgs = errors.New("there are too many arguments")
+	ErrNotEnoughArgs = errors.New("there are not enough arguments")
+	ErrInvalidValues = errors.New("invalid values")
+	ErrNegativeValues = errors.New("one or more values are negative")
+	ErrNLessThan2 = errors.New("n must be greater than 2")
+)
+
 const (
-	tooManyArgs = "There are too many arguments.\n"
-	notEnoughArgs = "There are not enough arguments.\n"
-
-	invalidValues = "Invalid values.\n"
-	negativeValues = "One or more values are negative.\n"
-	nLessThan2 = "n must be greater than 2"
-
 	maxArg = 6
 	minArg = 6
 )
@@ -36,10 +37,10 @@ func CheckArgs() error {
 
 	// Check the number of arguments
 	if len(argsWithoutProg) < minArg {
-		return errors.New(notEnoughArgs)
+		return ErrNotEnoughArgs
 	}
 	if len(argsWithoutProg) > maxArg {
-		return errors.New(tooManyArgs)
+		return ErrTooManyArgs
 	}
 
 	// Retrieve values
@@ -47,10 +48,10 @@ func CheckArgs() error {
 
 	for _, arg := range argsWithoutProg {
 		value, err := strconv.ParseFloat(arg, 64); if err != nil {
-			return errors.New(invalidValues)
+			return ErrInvalidValues
 		}
 		if value < 0 {
-			return errors.New(negativeValues)
+			return ErrNegativeValues
 		}
 		values = append(values, value)
 	}
@@ -62,7 +63,7 @@ func CheckArgs() error {
 	n = values[5]
 
 	if n < 2 {
-		return errors.New(nLessThan2)
+		return ErrNLessThan2
 	}
 
 	return nil
