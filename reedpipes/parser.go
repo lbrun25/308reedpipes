@@ -50,7 +50,7 @@ func CheckArgs() error {
 		value, err := strconv.ParseFloat(arg, 64); if err != nil {
 			return ErrInvalidValues
 		}
-		if value < 0 {
+		if value <= 0 {
 			return ErrNegativeValues
 		}
 		values = append(values, value)
